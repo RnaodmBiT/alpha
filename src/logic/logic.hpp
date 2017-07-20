@@ -1,4 +1,5 @@
 #pragma once
+#include <event.hpp>
 
 class GameLogic {
 public:
@@ -8,6 +9,8 @@ public:
     void Reset();
 
     void Update(float dt);
+
+    EventQueue Events;
 
 private:
 

@@ -4,6 +4,8 @@
 #include <SDL.h>
 #include <GL/glew.h>
 
+#include <event.hpp>
+
 /*
  * The Application class will encapsulate a window,
  * an application level event queue, and all of the
@@ -25,6 +27,8 @@ public:
 
     virtual void Update(float dt) = 0;
     virtual void Draw() = 0;
+
+    EventQueue Events;
 
 private:
 

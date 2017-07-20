@@ -2,6 +2,7 @@
 #include <logic.hpp>
 
 
+
 class AlphaApplication : public Application {
 public:
     bool Initialize(Application::options opts) {
@@ -21,7 +22,7 @@ public:
     }
 
     void Update(float dt) {
-        printf("Update dt = %f\n", dt);
+        Events.UpdateQueue();
         logic.Update(dt);
     }
 
