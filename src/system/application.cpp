@@ -1,6 +1,7 @@
 #include "application.hpp"
 
 #include <cstdio>
+#include "time.hpp"
 
 bool Application::Initialize(options opts) {
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -30,12 +31,17 @@ bool Application::Initialize(options opts) {
         return false;
     }
 
+    timeStep = 1.0f / opts.updateRate;
+
     return true;
 }
 
 
 void Application::Run() {
     running = true;
+
+    float accumulator = 0.0f;
+    Stopwatch time;
 
     SDL_Event e;
     while (running) {
@@ -47,8 +53,13 @@ void Application::Run() {
             }
         }
 
-        // TODO: fix this timestep
-        Update(0.0f);
+        accumulator += time.Reset();
+
+        while (accumulator > timeStep) {
+            Update(timeStep);
+            accumulator -= timeStep;
+        }
+
         Draw();
 
         SDL_GL_SwapWindow(window);

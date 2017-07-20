@@ -15,6 +15,7 @@ public:
     struct options {
         std::string title;
         int width, height;
+        float updateRate;
     };
 
     virtual bool Initialize(options opts);
@@ -28,6 +29,7 @@ public:
 private:
 
     bool running;
+    float timeStep;
 
     SDL_Window* window;
     SDL_GLContext context;
