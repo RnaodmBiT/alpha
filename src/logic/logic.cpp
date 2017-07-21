@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <file.hpp>
 #include "actor.hpp"
+#include <application.hpp>
 
 class TestComponent : public IComponent {
 public:
@@ -20,15 +21,20 @@ private:
 };
 
 
-bool GameLogic::Initialize() {
+bool GameLogic::Initialize(Application* app) {
+    events = &app->Events;
 
-    ActorFactory factory;
-    factory.AddCreator("test", TestComponent::Create);
+    actorFactory.AddCreator("test", TestComponent::Create);
 
-    Actor* actor = factory.CreateActor(json::parse(file::read("data/actors/test.json")));
+    CreateActor(json::parse(file::read("data/actors/test.json")));
 
-    TestComponent* test = actor->GetComponent<TestComponent>();
-    printf("Actor has component with value = %f\n", test->GetValue());
+    for (auto& idPtr : actors) {
+        Actor* actor = idPtr.second.get();
+        TestComponent* test = actor->GetComponent<TestComponent>();
+        if (test) {
+            printf("Test = %f\n", test->GetValue());
+        }
+    }
 
     return true;
 }
@@ -39,5 +45,15 @@ void GameLogic::Reset() {
 
 
 void GameLogic::Update(float dt) {
+}
+
+
+void GameLogic::CreateActor(const json& desc) {
+    Actor* actor = actorFactory.CreateActor(desc);
+    if (actor) {
+        actors[actor->GetID()].reset(actor);
+    } else {
+        printf("Error creating actor!\n");
+    }
 }
 

@@ -1,20 +1,25 @@
 #pragma once
 #include <event.hpp>
+#include "actor.hpp"
+
+class Application;
 
 class GameLogic {
 public:
 
-    bool Initialize();
+    bool Initialize(Application* app);
 
     void Reset();
 
     void Update(float dt);
 
-    EventQueue Events;
-
 private:
 
-    // TODO: add a list of actors
+    void CreateActor(const json& desc);
+
+    EventQueue* events;
+    ActorFactory actorFactory;
+    std::map<ActorID, std::unique_ptr<Actor>> actors;
 
 };
 

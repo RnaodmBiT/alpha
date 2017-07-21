@@ -3,6 +3,7 @@
 #include <vector>
 #include <map>
 #include <algorithm>
+#include <memory>
 
 
 typedef int EventID;
@@ -43,7 +44,8 @@ public:
 
     template <typename Event>
     void QueueEvent(Event* event) {
-        events[Event::GetID()].push_back(event);
+        events[Event::GetID()].emplace_back(event);
+        delete event;
     }
 
     template <typename Event>
@@ -53,12 +55,11 @@ public:
 
     void UpdateQueue() {
         for (auto& idQueue : events) {
-            std::vector<IEvent*> queue;
+            std::vector<std::unique_ptr<IEvent>> queue;
             std::swap(queue, idQueue.second);
 
-            for (IEvent* e : queue) {
-                DispatchEvent(idQueue.first, e);
-                delete e;
+            for (auto& e : queue) {
+                DispatchEvent(idQueue.first, e.get());
             }
         }
     }
@@ -79,7 +80,7 @@ private:
     };
 
     std::map<EventID, std::vector<Delegate>> callbacks;
-    std::map<EventID, std::vector<IEvent*>> events;
+    std::map<EventID, std::vector<std::unique_ptr<IEvent>>> events;
 
 };
 

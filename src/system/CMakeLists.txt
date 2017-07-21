@@ -1,4 +1,5 @@
 
+include_directories(../logic)
 file(GLOB_RECURSE SOURCE *.cpp *.hpp)
 
 add_library(system ${SOURCE})
