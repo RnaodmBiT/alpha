@@ -14,13 +14,13 @@
 
 class Application {
 public:
-    struct options {
+    struct Options {
         std::string title;
         int width, height;
         float updateRate;
     };
 
-    virtual bool Initialize(options opts);
+    virtual bool Initialize(Options opts);
     virtual void Shutdown();
 
     void Run();

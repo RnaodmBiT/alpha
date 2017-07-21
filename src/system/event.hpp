@@ -20,7 +20,7 @@ public:
 
     template <typename Event, typename C>
     void Register(C* context, void (C::*method)(Event*)) {
-        delegate d;
+        Delegate d;
         d.obj = context;
         d.fn = [context, method] (IEvent* e) { (*context.*method)((Event*)e); };
         callbacks[Event::GetID()].push_back(d);
@@ -28,7 +28,7 @@ public:
 
     template <typename Event, typename C>
     void Register(C* context, std::function<void(Event*)> callback) {
-        delegate d;
+        Delegate d;
         d.obj = context;
         d.fn = [callback] (IEvent* e) { callback((Event*)e); };
         callbacks[Event::GetID()].push_back(d);
@@ -36,8 +36,8 @@ public:
 
     template <typename Event, typename C>
     void Unregister(C* context) {
-        std::vector<delegate>& delegates = callbacks[Event::GetID()];
-        auto it = std::remove_if(delegates.begin(), delegates.end(), [&] (const delegate& d) { return d.obj == context; });
+        std::vector<Delegate>& delegates = callbacks[Event::GetID()];
+        auto it = std::remove_if(delegates.begin(), delegates.end(), [&] (const Delegate& d) { return d.obj == context; });
         delegates.erase(it, delegates.end());
     }
 
@@ -67,18 +67,18 @@ public:
 private:
 
     void DispatchEvent(EventID id, IEvent* event) {
-        std::vector<delegate>& delegates = callbacks[id];
+        std::vector<Delegate>& delegates = callbacks[id];
         for (auto& delegate : delegates) {
             delegate.fn(event);
         }
     }
 
-    struct delegate {
+    struct Delegate {
         void* obj;
         DelegateFunctor fn;
     };
 
-    std::map<EventID, std::vector<delegate>> callbacks;
+    std::map<EventID, std::vector<Delegate>> callbacks;
     std::map<EventID, std::vector<IEvent*>> events;
 
 };

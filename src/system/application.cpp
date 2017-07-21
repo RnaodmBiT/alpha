@@ -3,7 +3,7 @@
 #include <cstdio>
 #include "time.hpp"
 
-bool Application::Initialize(options opts) {
+bool Application::Initialize(Options opts) {
     SDL_Init(SDL_INIT_EVERYTHING);
 
     // Create a window for the game

@@ -5,7 +5,7 @@
 
 class AlphaApplication : public Application {
 public:
-    bool Initialize(Application::options opts) {
+    bool Initialize(Application::Options opts) {
         if (!Application::Initialize(opts)) {
             return false;
         }
@@ -41,7 +41,7 @@ int main(int argc, char** argv) {
 
     AlphaApplication app;
 
-    Application::options opts;
+    Application::Options opts;
     opts.title = "ALPHA";
     opts.width = 1280;
     opts.height = 720;
