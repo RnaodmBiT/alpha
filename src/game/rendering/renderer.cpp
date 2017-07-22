@@ -15,7 +15,12 @@ void Renderer::Shutdown() {
 }
 
 
-void Renderer::RenderScene() {
-    font.Draw(0, 0, "Hello World!\nI like pie!", { 0, 0, 1, 1 });
+void Renderer::DrawScene() {
+    // TODO: Add this once we have a scene graph implemented
+}
+
+
+void Renderer::DrawText(const vec2& pos, const std::string& text, const vec4& color, int size) {
+    font.Draw(pos, text, color, size);
 }
 

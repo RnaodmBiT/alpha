@@ -11,7 +11,7 @@ public:
 
     void Shutdown();
 
-    void Draw(float x, float y, const std::string& text, const vec4& color = { 1, 1, 1, 1 }, int size = 1);
+    void Draw(const vec2& pos, const std::string& text, const vec4& color = { 1, 1, 1, 1 }, int size = 1);
 
     void Measure(const std::string& text, int size, int& width, int& height);
 

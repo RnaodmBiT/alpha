@@ -10,7 +10,9 @@ public:
 
     void Shutdown();
 
-    void RenderScene();
+    void DrawScene();
+
+    void DrawText(const vec2& pos, const std::string& text, const vec4& color, int size);
 
 private:
 

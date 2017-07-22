@@ -1,18 +1,25 @@
 #include <application.hpp>
 #include "rendering/renderer.hpp"
 #include "screen.hpp"
+#include "main_menu.hpp"
 
 class HumanView : public IGameView {
 public:
     void OnAttach(Application* app) {
         renderer.Initialize(app);
+
+        PushElement(new MainMenuElement);
     }
 
     void Update(float dt) {
     }
 
     void Draw() {
-        renderer.RenderScene();
+        renderer.DrawScene();
+
+        for (auto& element : screenElements) {
+            element->Draw(&renderer);
+        }
     }
 
     void PushElement(IScreenElement* element) {

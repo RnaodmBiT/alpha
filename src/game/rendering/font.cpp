@@ -23,7 +23,7 @@ void Font::Shutdown() {
 }
 
 
-void Font::Draw(float x, float y, const std::string& text, const vec4& color, int size) {
+void Font::Draw(const vec2& pos, const std::string& text, const vec4& color, int size) {
 
     static const vec2 quad[] = {
         { 0, 0 }, { 1, 0 }, { 0, 1 },
@@ -33,14 +33,14 @@ void Font::Draw(float x, float y, const std::string& text, const vec4& color, in
     int vp[4];
     glGetIntegerv(GL_VIEWPORT, vp);
 
-    mat4 projection = orthographic(0, 0, (float)vp[2], (float)vp[3]) * scale((float)size, (float)size, 0.0f);
+    mat4 projection = orthographic(0, 0, (float)vp[2], (float)vp[3]) * translate(pos.x, pos.y, 0.0f) * scale((float)size, (float)size, 0.0f);
 
     shader.Apply();
     shader["transform"] = projection;
     shader["font"] = font;
     shader["color"] = color;
 
-    float cursorX = x, cursorY = y;
+    float cursorX = 0, cursorY = 0;
 
     std::vector<vec4> verts;
 
@@ -48,7 +48,7 @@ void Font::Draw(float x, float y, const std::string& text, const vec4& color, in
         const Glyph& glyph = glyphs[c];
 
         if (c == '\n') {
-            cursorX = x;
+            cursorX = 0;
             cursorY += (float)(metrics.height + metrics.lineSpacing);
         } else {
 
