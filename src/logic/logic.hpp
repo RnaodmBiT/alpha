@@ -17,7 +17,6 @@ private:
 
     void CreateActor(const json& desc);
 
-    EventQueue* events;
     ActorFactory actorFactory;
     std::map<ActorID, std::unique_ptr<Actor>> actors;
 

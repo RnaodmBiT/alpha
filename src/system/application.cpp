@@ -3,6 +3,8 @@
 #include <cstdio>
 #include "time.hpp"
 
+EventQueue Events;
+
 bool Application::Initialize(Options opts) {
     SDL_Init(SDL_INIT_EVERYTHING);
 
@@ -41,6 +43,9 @@ bool Application::Initialize(Options opts) {
     }
 
     timeStep = 1.0f / opts.updateRate;
+
+    // Setup any events the application needs to respond too
+    Events.Register<QuitEvent>(this, [&] (QuitEvent*) { running = false; });
 
     return true;
 }
@@ -106,6 +111,7 @@ void Application::Draw() {
 
 
 void Application::Shutdown() {
+    printf("Shutdown\n");
     logic.Reset();
 
     SDL_GL_DeleteContext(context);
@@ -122,6 +128,7 @@ void Application::AttachView(IGameView* view) {
 
 
 void Application::RemoveView(IGameView* view) {
+    view->OnDetach(this);
     auto it = std::remove_if(views.begin(), views.end(), [view] (const std::unique_ptr<IGameView>& ptr) { return ptr.get() == view; });
     views.erase(it, views.end());
 }

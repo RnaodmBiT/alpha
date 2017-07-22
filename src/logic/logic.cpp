@@ -4,37 +4,9 @@
 #include "actor.hpp"
 #include <application.hpp>
 
-class TestComponent : public IComponent {
-public:
-    TestComponent(float value) : value(value) { }
-
-    float GetValue() const {
-        return value;
-    }
-
-    static TestComponent* Create(const json& node) {
-        return new TestComponent((float)node["value"]);
-    }
-
-private:
-    float value;
-};
-
 
 bool GameLogic::Initialize(Application* app) {
-    events = &app->Events;
-
-    actorFactory.AddCreator("test", TestComponent::Create);
-
-    CreateActor(json::parse(file::read("data/actors/test.json")));
-
-    for (auto& idPtr : actors) {
-        Actor* actor = idPtr.second.get();
-        TestComponent* test = actor->GetComponent<TestComponent>();
-        if (test) {
-            printf("Test = %f\n", test->GetValue());
-        }
-    }
+    // TODO: Add creators for components here
 
     return true;
 }

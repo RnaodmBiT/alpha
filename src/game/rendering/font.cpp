@@ -90,6 +90,9 @@ void Font::Measure(const std::string& text, int size, int& width, int& height) {
             cursorX += metrics.width + 1;
         }
     }
+
+    width *= size;
+    height *= size;
 }
 
 

@@ -13,6 +13,7 @@ public:
     void DrawScene();
 
     void DrawText(const vec2& pos, const std::string& text, const vec4& color, int size);
+    vec2 MeasureText(const std::string& text, int size);
 
 private:
 

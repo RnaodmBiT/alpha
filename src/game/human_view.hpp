@@ -8,7 +8,15 @@ public:
     void OnAttach(Application* app) {
         renderer.Initialize(app);
 
+        Events.Register<MouseEvent>(this, &HumanView::HandleMouseEvent);
+        Events.Register<KeyboardEvent>(this, &HumanView::HandleKeyboardEvent);
+
         PushElement(new MainMenuElement);
+    }
+
+    void OnDetach(Application* app) {
+        Events.Unregister<MouseEvent>(this);
+        Events.Unregister<KeyboardEvent>(this);
     }
 
     void Update(float dt) {
@@ -22,6 +30,8 @@ public:
         }
     }
 
+
+    // Screen Element management
     void PushElement(IScreenElement* element) {
         screenElements.emplace_back(element);
     }
@@ -31,6 +41,23 @@ public:
             return ptr.get() == element;
         });
         screenElements.erase(it, screenElements.end());
+    }
+
+    // Event Management
+    void HandleMouseEvent(MouseEvent* event) {
+        for (auto it = screenElements.rbegin(); it != screenElements.rend(); ++it) {
+            if ((*it)->HandleMouseEvent(event)) {
+                return;
+            }
+        }
+    }
+
+    void HandleKeyboardEvent(KeyboardEvent* event) {
+        for (auto it = screenElements.rbegin(); it != screenElements.rend(); ++it) {
+            if ((*it)->HandleKeyboardEvent(event)) {
+                return;
+            }
+        }
     }
 
 private:

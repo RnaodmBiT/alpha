@@ -9,6 +9,8 @@
 
 class Application;
 
+extern EventQueue Events;
+
 /*
  * The IView interface represents one of the interfaces
  * Into the game, be it a human, an AI, the network server.
@@ -18,6 +20,7 @@ public:
     virtual ~IGameView() { }
 
     virtual void OnAttach(Application* app) = 0;
+    virtual void OnDetach(Application* app) = 0;
 
     virtual void Update(float dt) = 0;
     virtual void Draw() { }
@@ -48,7 +51,6 @@ public:
     void AttachView(IGameView* view);
     void RemoveView(IGameView* view);
 
-    EventQueue Events;
 
 private:
 
@@ -66,6 +68,12 @@ private:
 
 // Define any events the Application class can generate
 
+class QuitEvent : public IEvent {
+public:
+    static EventID GetID() {
+        return 0x4BBB42E3;
+    }
+};
 
 class ResizeEvent : public IEvent {
 public:
