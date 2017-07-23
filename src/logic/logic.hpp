@@ -22,3 +22,15 @@ private:
 
 };
 
+
+class ActorCreatedEvent : public IEvent {
+public:
+    static EventID GetID() {
+        return 0x7A1A1AE4;
+    }
+
+    ActorCreatedEvent(ActorID id) : ID(id) { }
+
+    ActorID ID;
+};
+

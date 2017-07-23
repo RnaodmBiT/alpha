@@ -7,6 +7,7 @@ add_subdirectory(libs/assimp-3.3.1)
 
 include_directories(libs/SDL2-2.0.4/include
                     libs/glew
+                    libs/assimp-3.3.1/include
                     libs/stb)
 
 # Build the individual game systems

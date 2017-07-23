@@ -6,7 +6,18 @@
 class HumanView : public IGameView {
 public:
     void OnAttach(Application* app) {
-        renderer.Initialize(app);
+        SceneCamera* camera = new SceneCamera;
+        camera->SetProjection(1.0f, 3.1415f / 4.0f, 0.1f, 100.0f);
+        camera->SetPosition({ -3.0f, -2.0f, -4.0f });
+        camera->SetDirection({ 3.0f, 2.0f, 4.0f });
+        camera->SetUp({ 0.0f, 1.0f, 0.0f });
+
+        mesh.LoadFromFile("models/cube.dae");
+
+        SceneObject* object = new SceneObject(&mesh);
+        camera->PushNode(object);
+
+        renderer.Initialize(app, camera);
 
         Events.Register<MouseEvent>(this, &HumanView::HandleMouseEvent);
         Events.Register<KeyboardEvent>(this, &HumanView::HandleKeyboardEvent);
@@ -63,5 +74,7 @@ public:
 private:
     std::vector<std::unique_ptr<IScreenElement>> screenElements;
     Renderer renderer;
+
+    Mesh mesh;
 };
 

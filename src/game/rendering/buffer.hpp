@@ -69,11 +69,11 @@ public:
         glVertexAttribPointer(attributes++, components, type, normalized, 0, 0);
     }
 
-    void Bind() {
+    void Bind() const {
         glBindVertexArray(array);
     }
 
-    void Draw(int vertices, GLenum type = GL_TRIANGLES) {
+    void Draw(int vertices, GLenum type = GL_TRIANGLES) const {
         Bind();
         glDrawArrays(type, 0, vertices);
     }

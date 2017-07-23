@@ -24,6 +24,7 @@ void GameLogic::CreateActor(const json& desc) {
     Actor* actor = actorFactory.CreateActor(desc);
     if (actor) {
         actors[actor->GetID()].reset(actor);
+        Events.QueueEvent<ActorCreatedEvent>(new ActorCreatedEvent(actor->GetID()));
     } else {
         printf("Error creating actor!\n");
     }
