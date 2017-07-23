@@ -30,11 +30,11 @@ public:
 
 private:
 
+    void HandleResizeEvent(ResizeEvent* event);
+
     Font font;
 
     Scene scene;
-
-    Shader* shader;
 
     std::stack<mat4> transforms;
     mat4 projection;

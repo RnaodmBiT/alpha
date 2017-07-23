@@ -11,6 +11,11 @@ bool Application::Initialize(Options opts) {
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 
+    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+
     // Create a window for the game
     window = SDL_CreateWindow(opts.title.c_str(),
                               SDL_WINDOWPOS_UNDEFINED,
@@ -100,7 +105,7 @@ void Application::Update(float dt) {
 
 
 void Application::Draw() {
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     for (auto& view : views) {
         view->Draw();
@@ -112,6 +117,8 @@ void Application::Draw() {
 
 void Application::Shutdown() {
     printf("Shutdown\n");
+    Events.Unregister<QuitEvent>(this);
+
     logic.Reset();
 
     SDL_GL_DeleteContext(context);

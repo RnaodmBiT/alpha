@@ -59,6 +59,10 @@ public:
         farClip = farClipPlane;
     }
 
+    void SetAspectRatio(float ar) {
+        aspect = ar;
+    }
+
     mat4 GetProjection() const {
         return perspective(fov, aspect, nearClip, farClip);
     }

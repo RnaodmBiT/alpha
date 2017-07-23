@@ -6,13 +6,18 @@
 class HumanView : public IGameView {
 public:
     void OnAttach(Application* app) {
-        SceneCamera* camera = new SceneCamera;
+        time = 0;
+
+        camera = new SceneCamera;
         camera->SetProjection(1.0f, 3.1415f / 4.0f, 0.1f, 100.0f);
         camera->SetPosition({ -3.0f, -2.0f, -4.0f });
         camera->SetDirection({ 3.0f, 2.0f, 4.0f });
         camera->SetUp({ 0.0f, 1.0f, 0.0f });
 
-        mesh.LoadFromFile("models/cube.dae");
+        shader.LoadFromFiles("shaders/object.vert", "shaders/object.frag");
+
+        mesh.LoadFromFile("models/P90.dae");
+        mesh.SetShader(&shader);
 
         SceneObject* object = new SceneObject(&mesh);
         camera->PushNode(object);
@@ -31,6 +36,12 @@ public:
     }
 
     void Update(float dt) {
+        time += dt;
+
+        vec3 pos = { 5 * sin(time), 2, 5 * cos(time) };
+        camera->SetPosition(pos);
+        camera->SetDirection(-pos);
+
     }
 
     void Draw() {
@@ -76,5 +87,10 @@ private:
     Renderer renderer;
 
     Mesh mesh;
+    Shader shader;
+
+    SceneCamera* camera;
+
+    float time;
 };
 

@@ -1,4 +1,5 @@
 #include "renderer.hpp"
+#include <event.hpp>
 
 void Renderer::Initialize(Application* app, SceneCamera* camera) {
     glClearColor(0, 0, 0, 1);
@@ -6,19 +7,21 @@ void Renderer::Initialize(Application* app, SceneCamera* camera) {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    font.Initialize("shaders/font.vert", "shaders/font.frag");
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
 
-    shader = new Shader;
-    shader->LoadFromFiles("shaders/object.vert", "shaders/object.frag");
+    font.Initialize("shaders/font.vert", "shaders/font.frag");
 
     transforms.push(mat4());
 
     scene.Initialize(camera);
+
+    Events.Register<ResizeEvent>(this, &Renderer::HandleResizeEvent);
 }
 
 
 void Renderer::Shutdown() {
-
+    Events.Unregister<ResizeEvent>(this);
 }
 
 
@@ -60,12 +63,17 @@ void Renderer::PopTransform() {
 
 
 void Renderer::DrawMesh(const Mesh* mesh) {
-    shader->Apply();
-    shader->Get("projection") = projection;
-    shader->Get("view") = view;
-    shader->Get("world") = transforms.top();
+    mesh->Draw(projection, view, transforms.top());
+}
 
-    mesh->Draw();
+
+void Renderer::HandleResizeEvent(ResizeEvent* event) {
+    glViewport(0, 0, event->Width, event->Height);
+
+    SceneCamera* camera = scene.GetCamera();
+    if (camera) {
+        camera->SetAspectRatio((float)event->Width / (float)event->Height);
+    }
 }
 
 
