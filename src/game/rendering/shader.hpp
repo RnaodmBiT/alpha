@@ -2,6 +2,7 @@
 #include <GL/glew.h>
 #include <map>
 #include <string>
+#include <cache.hpp>
 
 class Uniform {
 public:
@@ -20,15 +21,17 @@ private:
 };
 
 
-class Shader {
+class Shader : public IResource {
 public:
+
+    static Shader* LoadResource(const std::string& filename);
 
     bool LoadFromFiles(const std::string& vertexFile, const std::string& fragmentFile);
 
-    Uniform& Get(const std::string& name);
-    Uniform& operator[](const std::string& name);
+    Uniform& Get(const std::string& name) const;
+    Uniform& operator[](const std::string& name) const;
 
-    void Apply();
+    void Apply() const;
 
 private:
 
@@ -36,7 +39,6 @@ private:
     bool BuildShader(const std::string& vertexSource, const std::string& fragmentSource);
 
     GLuint program;
-    std::map<std::string, Uniform> uniforms;
-
+    mutable std::map<std::string, Uniform> uniforms;
 };
 

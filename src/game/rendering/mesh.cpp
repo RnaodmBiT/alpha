@@ -3,6 +3,14 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
+
+Mesh* Mesh::LoadResource(const std::string& filename) {
+    Mesh* mesh = new Mesh;
+    mesh->LoadFromFile(filename);
+    return mesh;
+}
+
+
 void Mesh::LoadFromFile(const std::string& filename) {
 
     Assimp::Importer importer;
@@ -55,12 +63,7 @@ void Mesh::LoadFromFile(const std::string& filename) {
 }
 
 
-void Mesh::SetShader(Shader* s) {
-    shader = s;
-}
-
-
-void Mesh::Draw(const mat4& projection, const mat4& view, const mat4& world) const {
+void Mesh::Draw(const Shader* shader, const mat4& projection, const mat4& view, const mat4& world) const {
     shader->Apply();
     shader->Get("projection") = projection;
     shader->Get("view") = view;

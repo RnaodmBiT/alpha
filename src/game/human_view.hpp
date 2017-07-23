@@ -1,4 +1,5 @@
 #include <application.hpp>
+#include <cache.hpp>
 #include "rendering/renderer.hpp"
 #include "screen.hpp"
 #include "main_menu.hpp"
@@ -8,21 +9,26 @@ public:
     void OnAttach(Application* app) {
         time = 0;
 
+        Cache.AddLoader("shader", &Shader::LoadResource);
+        Cache.AddLoader("dae", &Mesh::LoadResource);
+
+        Cache.Load("fontShader", "shaders/font.shader");
+        Cache.Load("objectShader", "shaders/object.shader");
+
+        Cache.Load("p90", "models/P90.dae");
+
+
         camera = new SceneCamera;
         camera->SetProjection(1.0f, 3.1415f / 4.0f, 0.1f, 100.0f);
         camera->SetPosition({ -3.0f, -2.0f, -4.0f });
         camera->SetDirection({ 3.0f, 2.0f, 4.0f });
         camera->SetUp({ 0.0f, 1.0f, 0.0f });
 
-        shader.LoadFromFiles("shaders/object.vert", "shaders/object.frag");
 
-        mesh.LoadFromFile("models/P90.dae");
-        mesh.SetShader(&shader);
-
-        SceneObject* object = new SceneObject(&mesh);
+        SceneObject* object = new SceneObject(Cache.Get<Mesh>("p90"), Cache.Get<Shader>("objectShader"));
         camera->PushNode(object);
 
-        renderer.Initialize(app, camera);
+        renderer.Initialize(app, camera, "fontShader");
 
         Events.Register<MouseEvent>(this, &HumanView::HandleMouseEvent);
         Events.Register<KeyboardEvent>(this, &HumanView::HandleKeyboardEvent);
@@ -85,9 +91,6 @@ public:
 private:
     std::vector<std::unique_ptr<IScreenElement>> screenElements;
     Renderer renderer;
-
-    Mesh mesh;
-    Shader shader;
 
     SceneCamera* camera;
 

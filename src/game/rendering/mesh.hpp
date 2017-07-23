@@ -4,19 +4,18 @@
 #include <vector>
 #include <maths.hpp>
 #include "shader.hpp"
+#include <cache.hpp>
 
-class Mesh {
+class Mesh : public IResource {
 public:
+
+    static Mesh* LoadResource(const std::string& filename);
 
     void LoadFromFile(const std::string& filename);
 
-    void SetShader(Shader* shader);
-
-    void Draw(const mat4& projection, const mat4& view, const mat4& world) const;
+    void Draw(const Shader* shader, const mat4& projection, const mat4& view, const mat4& world) const;
 
 private:
-
-    Shader* shader;
 
     struct Part {
         Array object;

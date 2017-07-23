@@ -7,7 +7,7 @@
 
 class Font {
 public:
-    void Initialize(const std::string& vertexFile, const std::string& fragmentFile);
+    void Initialize(const std::string& shaderKey);
 
     void Shutdown();
 
@@ -27,7 +27,7 @@ private:
 
     void GenerateFontAtlas();
 
-    Shader shader;
+    const Shader* shader;
     Texture font;
     int atlasSize;
 

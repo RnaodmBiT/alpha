@@ -1,7 +1,7 @@
 #include "renderer.hpp"
 #include <event.hpp>
 
-void Renderer::Initialize(Application* app, SceneCamera* camera) {
+void Renderer::Initialize(Application* app, SceneCamera* camera, const std::string& fontShaderKey) {
     glClearColor(0, 0, 0, 1);
 
     glEnable(GL_BLEND);
@@ -10,7 +10,7 @@ void Renderer::Initialize(Application* app, SceneCamera* camera) {
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
-    font.Initialize("shaders/font.vert", "shaders/font.frag");
+    font.Initialize(fontShaderKey);
 
     transforms.push(mat4());
 
@@ -62,8 +62,8 @@ void Renderer::PopTransform() {
 }
 
 
-void Renderer::DrawMesh(const Mesh* mesh) {
-    mesh->Draw(projection, view, transforms.top());
+void Renderer::DrawMesh(const Mesh* mesh, const Shader* shader) {
+    mesh->Draw(shader, projection, view, transforms.top());
 }
 
 

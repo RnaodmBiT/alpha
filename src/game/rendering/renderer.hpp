@@ -10,7 +10,7 @@
 class Renderer {
 public:
 
-    void Initialize(Application* app, SceneCamera* camera);
+    void Initialize(Application* app, SceneCamera* camera, const std::string& fontShaderKey);
 
     void Shutdown();
 
@@ -26,7 +26,7 @@ public:
     void PushTransform(const mat4& transform);
     void PopTransform();
 
-    void DrawMesh(const Mesh* mesh);
+    void DrawMesh(const Mesh* mesh, const Shader* shader);
 
 private:
 

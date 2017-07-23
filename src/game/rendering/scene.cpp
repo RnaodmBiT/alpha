@@ -18,7 +18,7 @@ void SceneCamera::Draw(Renderer* r) {
 void SceneObject::Draw(Renderer* r) {
     r->PushTransform(transform);
 
-    r->DrawMesh(mesh);
+    r->DrawMesh(mesh, shader);
     DrawChildren(r);
 
     r->PopTransform();

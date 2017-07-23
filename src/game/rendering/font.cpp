@@ -2,8 +2,9 @@
 #include "font_5x7.hpp"
 #include <cmath>
 #include <maths.hpp>
+#include <cache.hpp>
 
-void Font::Initialize(const std::string& vertexFile, const std::string& fragmentFile) {
+void Font::Initialize(const std::string& shaderKey) {
 
     // Setup the buffers for rendering
     vertexBuffer.Initialize();
@@ -12,7 +13,7 @@ void Font::Initialize(const std::string& vertexFile, const std::string& fragment
     object.BindBuffer(vertexBuffer, 4, GL_FLOAT, false);
 
     // Load the shader files
-    shader.LoadFromFiles(vertexFile, fragmentFile);
+    shader = Cache.Get<Shader>(shaderKey);
 
     // Generate the font atlas from the raw font data
     GenerateFontAtlas();
@@ -35,10 +36,10 @@ void Font::Draw(const vec2& pos, const std::string& text, const vec4& color, int
 
     mat4 projection = orthographic(0, 0, (float)vp[2], (float)vp[3]) * translate(pos.x, pos.y, 0.0f) * scale((float)size, (float)size, 0.0f);
 
-    shader.Apply();
-    shader["transform"] = projection;
-    shader["font"] = font;
-    shader["color"] = color;
+    shader->Apply();
+    shader->Get("transform") = projection;
+    shader->Get("font") = font;
+    shader->Get("color") = color;
 
     float cursorX = 0, cursorY = 0;
 

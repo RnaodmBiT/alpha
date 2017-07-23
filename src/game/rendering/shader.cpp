@@ -2,6 +2,7 @@
 #include <file.hpp>
 #include <maths.hpp>
 #include "texture.hpp"
+#include <json.hpp>
 
 // TODO: Implement Uniform::Set
 
@@ -23,12 +24,30 @@ void Uniform::Set<vec4>(const vec4& value) {
 }
 
 
-bool Shader::LoadFromFiles(const std::string& vertexFile, const std::string& fragmentFile) {
-    return BuildShader(file::read(vertexFile), file::read(fragmentFile));
+Shader* Shader::LoadResource(const std::string& filename) {
+    json descriptor = json::parse(File::Read(filename));
+
+    std::string path = File::GetPath(filename);
+    std::string vertex = path + descriptor["vertex"].get<std::string>();
+    std::string fragment = path + descriptor["fragment"].get<std::string>();
+
+    Shader* shader = new Shader;
+    if (shader->LoadFromFiles(vertex, fragment)) {
+        return shader;
+    } else {
+        delete shader;
+        printf("Error: loading shader resource '%s'\n", filename.c_str());
+        return nullptr;
+    }
 }
 
 
-Uniform& Shader::Get(const std::string& name) {
+bool Shader::LoadFromFiles(const std::string& vertexFile, const std::string& fragmentFile) {
+    return BuildShader(File::Read(vertexFile), File::Read(fragmentFile));
+}
+
+
+Uniform& Shader::Get(const std::string& name) const {
     if (!uniforms.count(name)) {
         uniforms[name].id = glGetUniformLocation(program, name.c_str());
     }
@@ -37,12 +56,12 @@ Uniform& Shader::Get(const std::string& name) {
 }
 
 
-Uniform& Shader::operator[](const std::string& name) {
+Uniform& Shader::operator[](const std::string& name) const {
     return Get(name);
 }
 
 
-void Shader::Apply() {
+void Shader::Apply() const {
     glUseProgram(program);
 }
 

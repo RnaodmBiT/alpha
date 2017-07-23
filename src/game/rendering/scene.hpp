@@ -83,7 +83,7 @@ private:
 class SceneObject : public ISceneNode {
 public:
 
-    SceneObject(const Mesh* mesh, mat4 transform = mat4()) : transform(transform), mesh(mesh) { }
+    SceneObject(const Mesh* mesh, const Shader* shader, mat4 transform = mat4()) : transform(transform), mesh(mesh), shader(shader) { }
 
     const mat4& GetTransform() const { return transform; }
     void SetTransform(mat4 t) { transform = t; }
@@ -93,6 +93,7 @@ public:
 private:
     mat4 transform;
     const Mesh* mesh;
+    const Shader* shader;
 };
 
 
