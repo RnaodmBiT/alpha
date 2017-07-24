@@ -45,12 +45,12 @@ public:
     template <typename Event>
     void QueueEvent(Event* event) {
         events[Event::GetID()].emplace_back(event);
-        delete event;
     }
 
     template <typename Event>
     void TriggerEvent(Event* event) {
         DispatchEvent(Event::GetID(), event);
+        delete event;
     }
 
     void UpdateQueue() {

@@ -51,6 +51,8 @@ public:
     void AttachView(IGameView* view);
     void RemoveView(IGameView* view);
 
+    float GetAspectRatio() const;
+
 
 private:
 

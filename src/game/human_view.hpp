@@ -19,7 +19,7 @@ public:
 
 
         camera = new SceneCamera;
-        camera->SetProjection(1.0f, 3.1415f / 4.0f, 0.1f, 100.0f);
+        camera->SetProjection(app->GetAspectRatio(), 3.1415f / 4.0f, 0.1f, 100.0f);
         camera->SetPosition({ -3.0f, -2.0f, -4.0f });
         camera->SetDirection({ 3.0f, 2.0f, 4.0f });
         camera->SetUp({ 0.0f, 1.0f, 0.0f });

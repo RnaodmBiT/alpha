@@ -52,6 +52,7 @@ bool Application::Initialize(Options opts) {
     // Setup any events the application needs to respond too
     Events.Register<QuitEvent>(this, [&] (QuitEvent*) { running = false; });
 
+
     return true;
 }
 
@@ -138,6 +139,13 @@ void Application::RemoveView(IGameView* view) {
     view->OnDetach(this);
     auto it = std::remove_if(views.begin(), views.end(), [view] (const std::unique_ptr<IGameView>& ptr) { return ptr.get() == view; });
     views.erase(it, views.end());
+}
+
+
+float Application::GetAspectRatio() const {
+    int w, h;
+    SDL_GetWindowSize(window, &w, &h);
+    return (float)w / (float)h;
 }
 
 
