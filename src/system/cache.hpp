@@ -22,8 +22,15 @@ public:
     template <typename T>
     const T* Get(const std::string& key) {
         if (cache.count(key)) {
-            return dynamic_cast<T*>(cache[key].get());
+            T* ptr = dynamic_cast<T*>(cache[key].get());
+            if (ptr) {
+                return ptr;
+            } else {
+                printf("Error: wrong resource type for '%s'\n", key.c_str());
+                return nullptr;
+            }
         }
+        printf("Error: no resource called '%s' found.\n", key.c_str());
         return nullptr;
     }
 

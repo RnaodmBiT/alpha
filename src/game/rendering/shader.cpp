@@ -2,7 +2,7 @@
 #include <file.hpp>
 #include <maths.hpp>
 #include "texture.hpp"
-#include <json.hpp>
+#include <chaiscript.hpp>
 
 // TODO: Implement Uniform::Set
 
@@ -18,6 +18,13 @@ void Uniform::Set<Texture>(const Texture& value) {
     value.Bind();
 }
 
+template<>
+void Uniform::Set<CubeMap>(const CubeMap& value) {
+    glUniform1i(id, 0);
+    glActiveTexture(GL_TEXTURE0);
+    value.Bind();
+}
+
 template <>
 void Uniform::Set<vec4>(const vec4& value) {
     glUniform4f(id, value.x, value.y, value.z, value.w);
@@ -25,11 +32,11 @@ void Uniform::Set<vec4>(const vec4& value) {
 
 
 Shader* Shader::LoadResource(const std::string& filename) {
-    json descriptor = json::parse(File::Read(filename));
+    json::JSON descriptor = json::JSON::Load(File::Read(filename));
 
     std::string path = File::GetPath(filename);
-    std::string vertex = path + descriptor["vertex"].get<std::string>();
-    std::string fragment = path + descriptor["fragment"].get<std::string>();
+    std::string vertex = path + descriptor["vertex"].to_string();
+    std::string fragment = path + descriptor["fragment"].to_string();
 
     Shader* shader = new Shader;
     if (shader->LoadFromFiles(vertex, fragment)) {

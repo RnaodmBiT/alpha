@@ -1,0 +1,61 @@
+
+
+// Main game entry point, this should return a new state object
+def main(view) {
+    return MainMenu(view);
+}
+
+
+class MainMenu {
+
+    var view;
+    var time;
+    var camera;
+
+    def MainMenu(view) {
+        this.time = 0.0;
+        this.view := view;
+        this.camera := this.view.GetCamera();
+    }
+
+    def Update(dt) {
+        this.time += dt;
+
+        // Get the camera and calculate a new position for it
+        var position = vec3(5 * sin(this.time), -1.0f, 5 * cos(this.time));
+        var target = vec3();
+
+        this.camera.SetPosition(position);
+        this.camera.SetDirection(target - position);
+
+        // Return the next state object
+        return this;
+    }
+
+}
+
+
+class Backwards {
+    var view;
+    var time;
+    var camera;
+
+    def Backwards(view) {
+        this.time = 0.0;
+        this.view := view;
+        this.camera := this.view.GetCamera();
+    }
+
+    def Update(dt) {
+        this.time -= dt;
+
+        var position = vec3(5 * sin(this.time), -1.0f, 5 * cos(this.time));
+        var target = vec3();
+
+        this.camera.SetPosition(position);
+        this.camera.SetDirection(target - position);
+
+        return this;
+    }
+}
+

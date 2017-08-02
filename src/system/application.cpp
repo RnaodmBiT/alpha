@@ -5,6 +5,10 @@
 
 EventQueue Events;
 
+
+Application::Application() : scripting({}, { "scripts/" }) { }
+
+
 bool Application::Initialize(Options opts) {
     SDL_Init(SDL_INIT_EVERYTHING);
 
@@ -146,6 +150,11 @@ float Application::GetAspectRatio() const {
     int w, h;
     SDL_GetWindowSize(window, &w, &h);
     return (float)w / (float)h;
+}
+
+
+Scripting& Application::GetScripting() {
+    return scripting;
 }
 
 

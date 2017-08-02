@@ -10,6 +10,8 @@
 class Renderer {
 public:
 
+    static void RegisterScripting(Scripting& scripting);
+
     void Initialize(Application* app, SceneCamera* camera, const std::string& fontShaderKey);
 
     void Shutdown();

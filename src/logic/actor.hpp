@@ -3,7 +3,7 @@
 #include <functional>
 #include <vector>
 #include <map>
-#include <json.hpp>
+#include <chaiscript.hpp>
 
 class IComponent {
 public:
@@ -46,7 +46,7 @@ private:
 
 class ActorFactory {
 public:
-    typedef std::function<IComponent*(const json&)> ComponentCreator;
+    typedef std::function<IComponent*(const json::JSON&)> ComponentCreator;
 
     ActorFactory() : nextID(0) { }
 
@@ -54,12 +54,12 @@ public:
         creators[name] = creator;
     }
 
-    Actor* CreateActor(const json& desc) {
+    Actor* CreateActor(const json::JSON& desc) {
         Actor* actor = new Actor();
         actor->id = nextID++;
 
-        for (json::const_iterator it = desc.begin(); it != desc.end(); ++it) {
-            IComponent* component = CreateComponent(it.key(), it.value());
+        for (auto keyValue : desc.object_range()) {
+            IComponent* component = CreateComponent(keyValue.first, keyValue.second);
             if (component) {
                 actor->AddComponent(component);
             } else {
@@ -74,7 +74,7 @@ public:
 
 private:
 
-    IComponent* CreateComponent(const std::string& type, const json& node) {
+    IComponent* CreateComponent(const std::string& type, const json::JSON& node) {
         return creators.count(type) ? creators[type](node) : nullptr;
     }
 

@@ -10,7 +10,13 @@ void ResourceCache::AddLoader(const std::string& filetype, ResourceLoader loader
 void ResourceCache::Load(const std::string& key, const std::string& filename) {
     std::string ext = GetExtension(filename);
     if (loaders.count(ext)) {
-        cache[key].reset(loaders[ext](filename));
+        IResource* resource = loaders[ext](filename);
+        if (resource) {
+            cache[key].reset(resource);
+            printf("Loaded '%s' (%#x)\n", key.c_str(), resource);
+        } else {
+            printf("Error: failed to load file '%s'\n", filename.c_str());
+        }
     } else {
         printf("Error: no loader for file '%s'\n", filename.c_str());
     }

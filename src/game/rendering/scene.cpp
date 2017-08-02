@@ -9,6 +9,21 @@ void SceneCamera::Draw(Renderer* r) {
     r->SetProjection(GetProjection());
     r->SetView(GetView());
 
+    if (skybox) {
+        r->PushTransform(translate(position));
+
+        glDisable(GL_DEPTH_TEST);
+
+        shader->Apply();
+        shader->Get("cube") = *skybox;
+
+        r->DrawMesh(cube, shader);
+
+        glEnable(GL_DEPTH_TEST);
+
+        r->PopTransform();
+    }
+
     DrawChildren(r);
 }
 

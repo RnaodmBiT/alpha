@@ -4,12 +4,17 @@
 #include <SDL.h>
 #include <GL/glew.h>
 
-#include <event.hpp>
 #include <logic.hpp>
+#include <chaiscript.hpp>
+#include "event.hpp"
 
 class Application;
 
 extern EventQueue Events;
+
+typedef chaiscript::ChaiScript Scripting;
+typedef chaiscript::Boxed_Value ScriptObject;
+typedef std::shared_ptr<ScriptObject> ScriptObjectPtr;
 
 /*
  * The IView interface represents one of the interfaces
@@ -40,6 +45,8 @@ public:
         float updateRate;
     };
 
+    Application();
+
     bool Initialize(Options opts);
     void Shutdown();
 
@@ -53,6 +60,7 @@ public:
 
     float GetAspectRatio() const;
 
+    Scripting& GetScripting();
 
 private:
 
@@ -66,6 +74,8 @@ private:
 
     GameLogic logic;
     std::vector<std::unique_ptr<IGameView>> views;
+
+    Scripting scripting;
 };
 
 // Define any events the Application class can generate

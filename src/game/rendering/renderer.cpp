@@ -1,6 +1,15 @@
 #include "renderer.hpp"
 #include <event.hpp>
 
+
+void Renderer::RegisterScripting(Scripting& scripting) {
+    // Register the scene graph nodes
+    scripting.add(chaiscript::user_type<SceneCamera>(), "SceneCamera");
+    scripting.add(chaiscript::fun(&SceneCamera::SetPosition), "SetPosition");
+    scripting.add(chaiscript::fun(&SceneCamera::SetDirection), "SetDirection");
+}
+
+
 void Renderer::Initialize(Application* app, SceneCamera* camera, const std::string& fontShaderKey) {
     glClearColor(0, 0, 0, 1);
 

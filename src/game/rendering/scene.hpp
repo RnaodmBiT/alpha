@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <maths.hpp>
 #include "mesh.hpp"
+#include "texture.hpp"
 
 class Renderer;
 class ISceneNode;
@@ -44,6 +45,8 @@ private:
 class SceneCamera : public ISceneNode {
 public:
 
+    SceneCamera() : skybox(nullptr) { }
+
     void SetPosition(const vec3& p) { position = p; }
     void SetDirection(const vec3& d) { direction = d; }
     void SetUp(const vec3& u) { up = u; }
@@ -63,6 +66,12 @@ public:
         aspect = ar;
     }
 
+    void SetSkybox(const std::string& m, const std::string& c, const std::string& s) {
+        cube = Cache.Get<Mesh>(m);
+        shader = Cache.Get<Shader>(s);
+        skybox = Cache.Get<CubeMap>(c);
+    }
+
     mat4 GetProjection() const {
         return perspective(fov, aspect, nearClip, farClip);
     }
@@ -74,6 +83,10 @@ public:
     void Draw(Renderer* r);
 
 private:
+    const Mesh* cube;
+    const Shader* shader;
+    const CubeMap* skybox;
+
     vec3 position, direction, up;
     float aspect, fov, nearClip, farClip;
 };

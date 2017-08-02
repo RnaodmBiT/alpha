@@ -1,5 +1,6 @@
 {
-    "test": {
-        "value": 5
+    "SceneObject": {
+        "mesh": "p90",
+        "shader": "objectShader"
     }
 }

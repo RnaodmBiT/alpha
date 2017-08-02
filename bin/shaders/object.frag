@@ -1,7 +1,7 @@
 #version 330
 
 uniform vec4 diffuse;
-uniform vec3 light = vec3(2, 1, 0);
+uniform vec3 light = vec3(2, 1, -2);
 
 in vec3 normal;
 
